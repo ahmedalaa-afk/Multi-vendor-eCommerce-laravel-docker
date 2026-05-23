@@ -375,7 +375,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `photo`, `role`, `username`, `status`, `phone_number`, `address`, `social_id`, `social_type`) VALUES
 (18, 'Mustafa Hamzawy', 'admin@gmail.com', NULL, '$2y$10$5AgQIAnBIeZMHouOAXKu4.cKa8MzJtOvHM//O4dfCvlQEno1G4q3C', 'mNegtgw5nqKmOLdNZ99bmWbGHAQZw9kuwvLiHYAK6GiUeNBeeCVqNb80cJE9', '2023-06-18 08:32:47', NULL, NULL, 'admin', 'hamzawy1', 1, NULL, NULL, NULL, NULL),
-(21, 'Mustafa Mahmoud', 'vendor2@gmail.com', NULL, '$2y$10$Dn68crfXX/HrMR0JtxXuEe6WmLczTQURy82GQX5SlU5H380bD21d2', 'hypQ7YBboQcqJ7z6kRZnR86fCPmgETg51bSg3vZ0J9KOUFpYunkJwCmrd7Uh', '2023-06-18 06:33:45', '2023-06-18 07:33:42', NULL, 'vendor', 'mustafa_vendor_1', 1, NULL, NULL, NULL, NULL);
+(21, 'Mustafa Mahmoud', 'vendor2@gmail.com', NULL, '$2y$10$Dn68crfXX/HrMR0JtxXuEe6WmLczTQURy82GQX5SlU5H380bD21d2', 'hypQ7YBboQcqJ7z6kRZnR86fCPmgETg51bSg3vZ0J9KOUFpYunkJwCmrd7Uh', '2023-06-18 06:33:45', '2023-06-18 07:33:42', NULL, 'vendor', 'mustafa_vendor_1', 1, NULL, NULL, NULL, NULL),
+(22, 'Mustafa User', 'user@gmail.com', NULL, '$2y$10$5AgQIAnBIeZMHouOAXKu4.cKa8MzJtOvHM//O4dfCvlQEno1G4q3C', 'mNegtgw5nqKmOLdNZ99bmWbGHAQZw9kuwvLiHYAK6GiUeNBeeCVqNb80cJE9', '2023-06-18 08:32:47', NULL, NULL, 'user', 'hamzawy3', 1, NULL, NULL, NULL, NULL);
+
 
 -- --------------------------------------------------------
 
