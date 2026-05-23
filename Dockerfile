@@ -1,4 +1,4 @@
-# 1. Base Stage: نسطب فيها إضافات PHP عشان نستخدمها في باقي المراحل
+# 1. Base Stage
 FROM php:8.2-fpm AS base
 WORKDIR /var/www
 
@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-enable redis \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# 2. Builder Stage: مخصصة للـ Composer ونسخ ملفات المشروع
+# 2. Builder Stage
 FROM base AS builder
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
