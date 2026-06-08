@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecom-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecom-deployment
+  template:
+    metadata:
+      labels:
+        app: ecom-deployment
+    spec:
+      initContainers:
+        - name: copy-app-code
+          image: ahmedafk404/laravel-multi-ecom:latest
+          command:
+            [
+              "sh",
+              "-c",
+              "cp -r /var/www/html/. /app/ && chmod -R 777 /app/storage /app/bootstrap/cache",
+            ]
+          volumeMounts:
+            - name: share-app-code
+              mountPath: /app
+      containers:
+        - name: nginx-server
+          image: nginx
+          ports:
+            - containerPort: 80
+          env:
+            - name: NGINX_ENTRYPOINT_QUIET_LOGS
+              value: "1"
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+            - name: share-app-code
+              mountPath: /var/www/html
+
+        - name: ecom-deployment
+          image: ahmedafk404/laravel-multi-ecom:latest
+          ports:
+            - containerPort: 9000
+          env:
+            - name: DB_HOST
+              value: "mysql-service"
+            - name: DB_DATABASE
+              value: "eCommerce"
+            - name: DB_USERNAME
+              value: "root"
+            - name: DB_PASSWORD
+              value: ""
+            - name: APP_URL
+              value: "http://localhost:30201"
+          volumeMounts:
+            - name: share-app-code
+              mountPath: /var/www/html
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+        - name: share-app-code
+          emptyDir: {}

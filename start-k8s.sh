@@ -28,13 +28,7 @@ echo "🛍️ تشغيل تطبيق المتجر..."
 echo "🛍️ Starting Ecommerce App..."
 kubectl apply -f k8s/ecom-deployment.yml
 
-# 4. تشغيل خادم Nginx
-# Apply Nginx Web Server Deployment & Service
-echo "🌐 تشغيل Nginx..."
-echo "🌐 Starting Nginx..."
-kubectl apply -f k8s/nginx-deployment.yml
-
-# 5. تشغيل phpMyAdmin
+# 4. تشغيل phpMyAdmin
 # Apply phpMyAdmin Deployment & Service
 echo "🛠️ تشغيل phpMyAdmin..."
 echo "🛠️ Starting phpMyAdmin..."

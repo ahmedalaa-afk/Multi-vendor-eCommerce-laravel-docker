@@ -8,7 +8,6 @@ echo "========================================"
 # حذف الموارد بترتيب عكسي لتجنب مشاكل الاعتماديات
 # Delete resources in reverse order to avoid dependency issues
 kubectl delete -f k8s/phpmyadmin-deployment.yml
-kubectl delete -f k8s/nginx-deployment.yml
 kubectl delete -f k8s/ecom-deployment.yml
 kubectl delete -f k8s/mysql-deployment.yml
 kubectl delete -f k8s/nginx-config.yml

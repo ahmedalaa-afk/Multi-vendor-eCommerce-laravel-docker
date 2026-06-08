@@ -6,6 +6,7 @@ if [ ! -f .env ]; then
 fi
 # أوامر Laravel الأساسية
 php artisan key:generate --force
-php artisan migrate --force
-php artisan db:seed --class=Database\\Seeders\\UserSeeder --force
+php artisan config:clear
+php artisan cache:clear
 php artisan storage:link
+php-fpm
