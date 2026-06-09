@@ -63,3 +63,16 @@ spec:
             name: nginx-config
         - name: share-app-code
           emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ecom-service
+spec:
+  type: NodePort
+  selector:
+    app: ecom-deployment
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30201
