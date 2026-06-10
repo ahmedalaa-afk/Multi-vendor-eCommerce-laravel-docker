@@ -45,4 +45,4 @@ jobs:
 
       - name: apply manifest files
         run: |
-          ./start-k8s.sh
+          sudo ./start-k8s.sh
