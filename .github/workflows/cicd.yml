@@ -45,7 +45,7 @@ jobs:
 
       - name: apply manifest files
         run: |
-          chmod +x ./start-k8s.sh
-          chmod +x ./stop-k8s.sh
-          chmod +x ./start-artisan.sh
+          sudo chmod +x ./start-k8s.sh
+          sudo chmod +x ./stop-k8s.sh
+          sudo chmod +x ./start-artisan.sh
           sudo ./start-k8s.sh
