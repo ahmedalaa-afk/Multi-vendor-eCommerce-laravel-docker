@@ -53,7 +53,7 @@ spec:
             - name: DB_PASSWORD
               value: ""
             - name: APP_URL
-              value: "http://localhost:30201"
+              value: "http://ecom.local"
           volumeMounts:
             - name: share-app-code
               mountPath: /var/www/html
@@ -69,10 +69,9 @@ kind: Service
 metadata:
   name: ecom-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: ecom-deployment
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30201
