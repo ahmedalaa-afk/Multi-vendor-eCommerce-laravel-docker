@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.app.name}}
+spec:
+  replicas: {{.Values.app.replicas}}
+  selector:
+    matchLabels:
+      app: {{.Values.app.name}}
+  template:
+    metadata:
+      labels:
+        app: {{.Values.app.name}}
+    spec:
+      initContainers:
+        - name: copy-app-code
+          image: {{.Values.app.image}}
+          command:
+            [
+              "sh",
+              "-c",
+              "cp -r /var/www/html/. /app/ && chmod -R 777 /app/storage /app/bootstrap/cache",
+            ]
+          volumeMounts:
+            - name: share-app-code
+              mountPath: /app
+      containers:
+        - name: {{ .Values.nginx.name }}
+          image: {{.Values.nginx.image}}
+          ports:
+            - containerPort: {{.Values.nginx.containerPort}}
+          env:
+            - name: NGINX_ENTRYPOINT_QUIET_LOGS
+              value: "1"
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+            - name: share-app-code
+              mountPath: /var/www/html
+
+        - name: {{ .Values.app.name}}
+          image: {{.Values.app.image}}
+          ports:
+            - containerPort: {{.Values.app.containerPort}}
+          env:
+            - name: DB_HOST
+              value: "mysql-service"
+            - name: DB_DATABASE
+              value: "eCommerce"
+            - name: DB_USERNAME
+              value: "root"
+            - name: DB_PASSWORD
+              value: ""
+            - name: APP_URL
+              value: "http://localhost:30201"
+          volumeMounts:
+            - name: share-app-code
+              mountPath: /var/www/html
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+        - name: share-app-code
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app.service.name}}
+spec:
+  type: {{ .Values.app.service.type }}
+  selector:
+    app: {{ .Values.app.name}}
+  ports:
+    - port: {{ .Values.app.service.port }}
+      targetPort: {{ .Values.app.service.targetPort }}
+      nodePort: {{ .Values.app.service.nodePort }}

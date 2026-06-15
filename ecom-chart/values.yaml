@@ -1,0 +1,40 @@
+app:
+  name: ecom-deployment
+  replicas: 1
+  image: ahmedafk404/laravel-multi-ecom:latest
+  containerPort: 9000
+  service:
+    name: ecom-service
+    type: NodePort
+    port: 80
+    targetPort: 80
+    nodePort: 30201
+nginx:
+  name: nginx-server
+  image: nginx
+  containerPort: 80
+mysql:
+  name: mysql
+  replicas: 1
+  image: mysql
+  containerPort: 3306
+  service:
+    name: mysql-service
+    type: ClusterIP
+    port: 3306
+    targetPort: 3306
+  pvc:
+    name: db-pvc
+    accessModes: ReadWriteOnce
+    storage: 10Gi
+phpmyadmin:
+  name: phpmyadmin
+  replicas: 1
+  image: phpmyadmin
+  containerPort: 80
+  service:
+    name: phpmyadmin-service
+    type: NodePort
+    port: 8080
+    targetPort: 80
+    nodePort: 30001

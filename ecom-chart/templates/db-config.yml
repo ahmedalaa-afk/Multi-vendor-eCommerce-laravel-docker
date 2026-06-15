@@ -1,0 +1,231 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-db
+data:
+  eCommerce.sql: |
+    CREATE DATABASE IF NOT EXISTS eCommerce;
+    USE eCommerce;
+
+    SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+    START TRANSACTION;
+    SET time_zone = "+00:00";
+
+    /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+    /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+    /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+    /*!40101 SET NAMES utf8mb4 */;
+
+    -- Table structure for table `brand`
+    CREATE TABLE `brand` (
+      `brand_id` int(11) NOT NULL AUTO_INCREMENT,
+      `brand_name` varchar(150) NOT NULL,
+      `brand_image` varchar(250) NOT NULL,
+      `brand_slug` varchar(150) NOT NULL,
+      PRIMARY KEY (`brand_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    INSERT INTO `brand` (`brand_id`, `brand_name`, `brand_image`, `brand_slug`) VALUES
+    (1, 'Intel', 'd4d24e905d65f47fb0600f535223abbe.png', 'intel'),
+    (2, 'BMW', 'cb7734d775d2f9d8c897f44e476ded69.png', 'bmw'),
+    (3, 'Dell Technologies', '68c1f6c4ea4e1d2b597f5e33d343ea3a.png', 'dell-technologies'),
+    (4, 'Mcdonalds', '61f5584bcff2df413e98afe5897cc5e6.png', 'mcdonalds'),
+    (6, 'test', '1bf8db27d77e17cae156ad338fb89dd6.jpg', 'test'),
+    (7, 'Calvin Klein', '623b7445674ac88995f9cd485d8e0fda.jpg', 'calvin-klein');
+
+    -- Table structure for table `category`
+    CREATE TABLE `category` (
+      `category_id` int(11) NOT NULL AUTO_INCREMENT,
+      `category_name` varchar(150) NOT NULL,
+      `category_image` varchar(250) NOT NULL,
+      `category_slug` varchar(150) NOT NULL,
+      PRIMARY KEY (`category_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    INSERT INTO `category` (`category_id`, `category_name`, `category_image`, `category_slug`) VALUES
+    (2, 'Electronics', 'c2e704303411471b175f61923b620676.webp', 'electronics'),
+    (3, 'Clothes', '23e5db1d6e9877d8d81d1e87c95bca59.jpg', 'clothes'),
+    (4, 'Bags & Wallets', '33e271be784b566b69a571fa5a60a246.jpg', 'bags-&-wallets');
+
+    -- Table structure for table `users`
+    CREATE TABLE `users` (
+      `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `name` varchar(255) NOT NULL,
+      `email` varchar(255) NOT NULL,
+      `email_verified_at` timestamp NULL DEFAULT NULL,
+      `password` varchar(255) NOT NULL,
+      `remember_token` varchar(100) DEFAULT NULL,
+      `created_at` timestamp NULL DEFAULT current_timestamp(),
+      `updated_at` timestamp NULL DEFAULT NULL,
+      `photo` varchar(250) DEFAULT NULL,
+      `role` varchar(15) NOT NULL,
+      `username` varchar(200) NOT NULL,
+      `status` tinyint(4) NOT NULL DEFAULT 0,
+      `phone_number` varchar(20) DEFAULT NULL,
+      `address` varchar(200) DEFAULT NULL,
+      `social_id` varchar(255) DEFAULT NULL,
+      `social_type` varchar(255) DEFAULT NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `users_email_unique` (`email`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `photo`, `role`, `username`, `status`, `phone_number`, `address`, `social_id`, `social_type`) VALUES
+    (18, 'Mustafa Hamzawy', 'admin@gmail.com', NULL, '$2y$10$5AgQIAnBIeZMHouOAXKu4.cKa8MzJtOvHM//O4dfCvlQEno1G4q3C', 'mNegtgw5nqKmOLdNZ99bmWbGHAQZw9kuwvLiHYAK6GiUeNBeeCVqNb80cJE9', '2023-06-18 08:32:47', NULL, NULL, 'admin', 'hamzawy1', 1, NULL, NULL, NULL, NULL),
+    (21, 'Mustafa Mahmoud', 'vendor2@gmail.com', NULL, '$2y$10$Dn68crfXX/HrMR0JtxXuEe6WmLczTQURy82GQX5SlU5H380bD21d2', 'hypQ7YBboQcqJ7z6kRZnR86fCPmgETg51bSg3vZ0J9KOUFpYunkJwCmrd7Uh', '2023-06-18 06:33:45', '2023-06-18 07:33:42', NULL, 'vendor', 'mustafa_vendor_1', 1, NULL, NULL, NULL, NULL),
+    (22, 'Mustafa User', 'user@gmail.com', NULL, '$2y$10$5AgQIAnBIeZMHouOAXKu4.cKa8MzJtOvHM//O4dfCvlQEno1G4q3C', 'mNegtgw5nqKmOLdNZ99bmWbGHAQZw9kuwvLiHYAK6GiUeNBeeCVqNb80cJE9', '2023-06-18 08:32:47', NULL, NULL, 'user', 'hamzawy3', 1, NULL, NULL, NULL, NULL);
+
+    -- Table structure for table `vendor_shop`
+    CREATE TABLE `vendor_shop` (
+      `vendor_id` int(11) NOT NULL AUTO_INCREMENT,
+      `shop_name` varchar(200) DEFAULT NULL,
+      `shop_description` text DEFAULT NULL,
+      `user_id` bigint(20) UNSIGNED NOT NULL,
+      PRIMARY KEY (`vendor_id`),
+      KEY `vendor_shop_users_id_fk` (`user_id`),
+      CONSTRAINT `vendor_shop_users_id_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    INSERT INTO `vendor_shop` (`vendor_id`, `shop_name`, `shop_description`, `user_id`) VALUES
+    (7, NULL, NULL, 21);
+
+    -- Table structure for table `coupon`
+    CREATE TABLE `coupon` (
+      `coupon_id` int(11) NOT NULL AUTO_INCREMENT,
+      `coupon_code` varchar(250) NOT NULL,
+      `discount_amount` smallint(6) NOT NULL,
+      `expiration_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+      `VendorId` int(11) DEFAULT NULL,
+      `coupon_status` tinyint(4) DEFAULT 1,
+      PRIMARY KEY (`coupon_id`),
+      KEY `coupon_vendor_shop_vendor_id_fk` (`VendorId`),
+      CONSTRAINT `coupon_vendor_shop_vendor_id_fk` FOREIGN KEY (`VendorId`) REFERENCES `vendor_shop` (`vendor_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    INSERT INTO `coupon` (`coupon_id`, `coupon_code`, `discount_amount`, `expiration_date`, `VendorId`, `coupon_status`) VALUES
+    (1, 'hamzawy15', 15, '2023-06-22 10:24:00', 7, 1),
+    (2, 'hamzawy18', 18, '2023-06-30 10:25:00', 7, 1);
+
+    -- Table structure for table `failed_jobs`
+    CREATE TABLE `failed_jobs` (
+      `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `uuid` varchar(255) NOT NULL,
+      `connection` text NOT NULL,
+      `queue` text NOT NULL,
+      `payload` longtext NOT NULL,
+      `exception` longtext NOT NULL,
+      `failed_at` timestamp NOT NULL DEFAULT current_timestamp(),
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    -- Table structure for table `migrations`
+    CREATE TABLE `migrations` (
+      `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `migration` varchar(255) NOT NULL,
+      `batch` int(11) NOT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+    INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+    (1, '2014_10_12_000000_create_users_table', 1),
+    (2, '2014_10_12_100000_create_password_resets_table', 1),
+    (3, '2019_08_19_000000_create_failed_jobs_table', 1),
+    (4, '2019_12_14_000001_create_personal_access_tokens_table', 1),
+    (5, '2023_04_26_192132_create_notifications_table', 1),
+    (6, '2023_05_31_194504_notifications', 2),
+    (7, '2023_06_17_182128_add_social_login', 2);
+
+    -- Table structure for table `sub_category`
+    CREATE TABLE `sub_category` (
+      `sub_category_id` int(11) NOT NULL AUTO_INCREMENT,
+      `sub_category_name` varchar(150) NOT NULL,
+      `sub_category_image` varchar(250) NOT NULL,
+      `category_id` int(11) NOT NULL,
+      `sub_category_slug` varchar(150) NOT NULL,
+      `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+      PRIMARY KEY (`sub_category_id`),
+      KEY `sub_category_category_category_id_fk` (`category_id`),
+      CONSTRAINT `sub_category_category_category_id_fk` FOREIGN KEY (`category_id`) REFERENCES `category` (`category_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    INSERT INTO `sub_category` (`sub_category_id`, `sub_category_name`, `sub_category_image`, `category_id`, `sub_category_slug`, `created_at`) VALUES
+    (2, 'Mobiles', 'b28fb8bbf7d007635f048670a5c612ef.jpg', 2, 'mobiles', '2023-06-18 09:09:48'),
+    (3, 'T-shirts', '5caac2d25cf948a457d6645d66851a3f.webp', 3, 't-shirts', '2023-06-18 09:11:56');
+
+    -- Table structure for table `product`
+    CREATE TABLE `product` (
+      `product_id` int(11) NOT NULL AUTO_INCREMENT,
+      `product_name` varchar(250) NOT NULL,
+      `product_code` varchar(250) DEFAULT NULL,
+      `product_tags` varchar(250) NOT NULL,
+      `product_colors` varchar(250) NOT NULL,
+      `product_short_description` text NOT NULL,
+      `product_long_description` text DEFAULT NULL,
+      `product_slug` varchar(250) NOT NULL,
+      `product_price` double NOT NULL,
+      `product_thumbnail` varchar(250) NOT NULL,
+      `product_status` binary(1) NOT NULL DEFAULT ' ',
+      `sub_category_id` int(11) NOT NULL,
+      `brand_id` int(11) NOT NULL,
+      `vendor_id` int(11) NOT NULL,
+      `product_quantity` int(11) NOT NULL,
+      PRIMARY KEY (`product_id`),
+      KEY `product_product__fk` (`vendor_id`),
+      KEY `product_brand_brand_id_fk` (`brand_id`),
+      KEY `product_sub_category_sub_category_id_fk` (`sub_category_id`),
+      CONSTRAINT `product_brand_brand_id_fk` FOREIGN KEY (`brand_id`) REFERENCES `brand` (`brand_id`) ON UPDATE CASCADE,
+      CONSTRAINT `product_product__fk` FOREIGN KEY (`vendor_id`) REFERENCES `vendor_shop` (`vendor_id`) ON UPDATE CASCADE,
+      CONSTRAINT `product_sub_category_sub_category_id_fk` FOREIGN KEY (`sub_category_id`) REFERENCES `sub_category` (`sub_category_id`) ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    INSERT INTO `product` (`product_id`, `product_name`, `product_code`, `product_tags`, `product_colors`, `product_short_description`, `product_long_description`, `product_slug`, `product_price`, `product_thumbnail`, `product_status`, `sub_category_id`, `brand_id`, `vendor_id`, `product_quantity`) VALUES
+    (1, 'logo-print cotton T-shirt', 'Calvin1', 'tshirt,calvin', 'red,green,yellow,blue', 'logo-print cotton T-shirt from CALVIN KLEIN', 'Organic Cotton 100%', 'logo-print-cotton-t-shirt', 390.5, 'fd1e5c8620dd7be3c591e7df82164471.webp', 0x31, 3, 7, 7, 15);
+
+    -- Table structure for table `product_images`
+    CREATE TABLE `product_images` (
+      `image_id` int(11) NOT NULL AUTO_INCREMENT,
+      `product_image` varchar(250) NOT NULL,
+      `image_product_id` int(11) NOT NULL,
+      PRIMARY KEY (`image_id`),
+      KEY `product_images_product_product_id_fk` (`image_product_id`),
+      CONSTRAINT `product_images_product_product_id_fk` FOREIGN KEY (`image_product_id`) REFERENCES `product` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    INSERT INTO `product_images` (`image_id`, `product_image`, `image_product_id`) VALUES
+    (1, '54527d2d08eff6faae4689e350e6a84a.webp', 1),
+    (2, '1f8be4908ff805608e5e1d66ad1ca513.webp', 1),
+    (3, 'b222d66e6f34f0473a161489f18f6b24.webp', 1);
+
+    -- Table structure for table `product_offers`
+    CREATE TABLE `product_offers` (
+      `offer_id` int(11) NOT NULL AUTO_INCREMENT,
+      `hot_deal` tinyint(4) DEFAULT 0,
+      `featured_product` tinyint(4) DEFAULT 0,
+      `special_offer` tinyint(4) DEFAULT 0,
+      `special_deal` tinyint(4) DEFAULT 0,
+      `offer_product_id` int(11) DEFAULT NULL,
+      PRIMARY KEY (`offer_id`),
+      KEY `product_offers_product_product_id_fk` (`offer_product_id`),
+      CONSTRAINT `product_offers_product_product_id_fk` FOREIGN KEY (`offer_product_id`) REFERENCES `product` (`product_id`) ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+    INSERT INTO `product_offers` (`offer_id`, `hot_deal`, `featured_product`, `special_offer`, `special_deal`, `offer_product_id`) VALUES
+    (1, 1, 0, 1, 0, 1);
+
+    -- Views Structure
+    CREATE OR REPLACE VIEW `get_product_data` AS 
+    SELECT DISTINCT `product`.`product_id` AS `product_id`, `product`.`product_name` AS `product_name`, `product`.`product_slug` AS `product_slug`, `product`.`product_code` AS `product_code`, `product`.`product_quantity` AS `product_quantity`, `product`.`product_tags` AS `product_tags`, `product`.`product_price` AS `product_price`, `product`.`product_short_description` AS `product_short_description`, `product`.`product_long_description` AS `product_long_description`, `product`.`product_thumbnail` AS `product_thumbnail`, `product`.`product_status` AS `product_status`, `product`.`sub_category_id` AS `sub_category_id`, `product`.`brand_id` AS `brand_id`, `product`.`vendor_id` AS `vendor_id`, `product`.`product_colors` AS `product_colors`, `po`.`offer_id` AS `offer_id`, `po`.`offer_product_id` AS `offer_product_id`, `po`.`hot_deal` AS `hot_deal`, `po`.`featured_product` AS `featured_product`, `po`.`special_offer` AS `special_offer`, `po`.`special_deal` AS `special_deal` 
+    FROM (`product` join `product_offers` `po` on(`product`.`product_id` = `po`.`offer_product_id`));
+
+    CREATE OR REPLACE VIEW `get_sub_categories` AS 
+    SELECT `sub`.`sub_category_id` AS `sub_category_id`, `sub`.`sub_category_name` AS `sub_category_name`, `sub`.`sub_category_slug` AS `sub_category_slug`, `sub`.`sub_category_image` AS `sub_category_image`, `sub`.`category_id` AS `selected_category_id`, `sub`.`created_at` AS `created_at`, `category`.`category_name` AS `category_name` 
+    FROM (`sub_category` `sub` join `category` on(`sub`.`category_id` = `category`.`category_id`));
+
+    CREATE OR REPLACE VIEW `get_vendor_data` AS 
+    SELECT `users`.`id` AS `id`, `users`.`photo` AS `photo`, `users`.`name` AS `name`, `users`.`email` AS `email`, `users`.`username` AS `username`, `vendor_shop`.`shop_name` AS `shop_name`, `users`.`created_at` AS `created_at`, `vendor_shop`.`shop_description` AS `shop_description`, `users`.`phone_number` AS `phone_number`, `users`.`address` AS `address`, `vendor_shop`.`vendor_id` AS `vendor_id` 
+    FROM (`users` join `vendor_shop` on(`users`.`id` = `vendor_shop`.`user_id`));
+
+    COMMIT;
+    /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+    /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+    /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
