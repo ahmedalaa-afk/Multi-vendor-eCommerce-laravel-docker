@@ -5,10 +5,9 @@ app:
   containerPort: 9000
   service:
     name: ecom-service
-    type: NodePort
+    type: ClusterIP
     port: 80
     targetPort: 80
-    nodePort: 30201
 nginx:
   name: nginx-server
   image: nginx
@@ -34,7 +33,16 @@ phpmyadmin:
   containerPort: 80
   service:
     name: phpmyadmin-service
-    type: NodePort
-    port: 8080
+    type: ClusterIP
+    port: 80
     targetPort: 80
-    nodePort: 30001
+ingress:
+  name: ecom-ingress
+  ingressClassName: nginx
+  hosts:
+    - host: ecom.test
+      serviceName: ecom-service
+      servicePort: 80
+    - host: phpmyadmin.test
+      serviceName: phpmyadmin-service
+      servicePort: 80
